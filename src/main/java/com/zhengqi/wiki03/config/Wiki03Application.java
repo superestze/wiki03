@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+// import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @ComponentScan("com.zhengqi")
 @SpringBootApplication
@@ -17,7 +18,10 @@ public class Wiki03Application {
         SpringApplication app = new SpringApplication(Wiki03Application.class);
         Environment env = app.run(args).getEnvironment();
         LOG.info("启动成功！");
-        LOG.info("地址：\thttp:127.0.0.1:{}", env.getProperty("server.port"));
+        LOG.info("api 地址：\thttp:127.0.0.1:{}", env.getProperty("server.port"));
+        LOG.info("swagger 地址：\thttp:127.0.0.1:{}/swagger.html", env.getProperty("server.port"));
+        // LOG.info("swagger-layui 地址：\thttp:127.0.0.1:{}/docs.html", env.getProperty("server.port"));
+        LOG.info("swagger-bootstrap 地址：\thttp:127.0.0.1:{}/doc.html", env.getProperty("server.port"));
     }
 
 }
