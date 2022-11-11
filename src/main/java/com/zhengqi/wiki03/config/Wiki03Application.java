@@ -1,5 +1,6 @@
 package com.zhengqi.wiki03.config;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -10,9 +11,10 @@ import org.springframework.core.env.Environment;
 
 @ComponentScan("com.zhengqi")
 @SpringBootApplication
+@MapperScan("com.zhengqi.wiki03.mapper")
 public class Wiki03Application {
 
-     private final static Logger LOG = LoggerFactory.getLogger(Wiki03Application.class);
+    private final static Logger LOG = LoggerFactory.getLogger(Wiki03Application.class);
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Wiki03Application.class);
@@ -23,5 +25,4 @@ public class Wiki03Application {
         // LOG.info("swagger-layui 地址：\thttp:127.0.0.1:{}/docs.html", env.getProperty("server.port"));
         LOG.info("swagger-bootstrap 地址：\thttp:127.0.0.1:{}/doc.html", env.getProperty("server.port"));
     }
-
 }
