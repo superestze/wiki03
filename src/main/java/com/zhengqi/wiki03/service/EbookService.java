@@ -1,11 +1,14 @@
 package com.zhengqi.wiki03.service;
 
+import com.github.pagehelper.PageHelper;
 import com.zhengqi.wiki03.domain.Ebook;
 import com.zhengqi.wiki03.domain.EbookExample;
 import com.zhengqi.wiki03.mapper.EbookMapper;
 import com.zhengqi.wiki03.req.EbookReq;
 import com.zhengqi.wiki03.resp.EbookResp;
 import com.zhengqi.wiki03.util.CopyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.util.List;
 
 @Service
 public class EbookService {
+    
+     private final static Logger LOG = LoggerFactory.getLogger(EbookService.class);
     @Resource
     private EbookMapper eEbookMapper;
 
@@ -22,6 +27,8 @@ public class EbookService {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         criteria.andNameLike("%" + req.getName() + "%");
+
+        PageHelper.startPage(1,3);
         List<Ebook> ebooksList = eEbookMapper.selectByExample(ebookExample);
 
         // List<EbookResp> respList = new ArrayList<>();
