@@ -1,11 +1,13 @@
 package com.zhengqi.wiki03.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhengqi.wiki03.domain.Ebook;
 import com.zhengqi.wiki03.domain.EbookExample;
 import com.zhengqi.wiki03.mapper.EbookMapper;
 import com.zhengqi.wiki03.req.EbookReq;
 import com.zhengqi.wiki03.resp.EbookResp;
+import com.zhengqi.wiki03.resp.PageResp;
 import com.zhengqi.wiki03.util.CopyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +20,24 @@ import java.util.List;
 
 @Service
 public class EbookService {
-    
-     private final static Logger LOG = LoggerFactory.getLogger(EbookService.class);
+
+    private final static Logger LOG = LoggerFactory.getLogger(EbookService.class);
     @Resource
     private EbookMapper eEbookMapper;
 
-    public List<EbookResp> list(EbookReq req) {
+    public PageResp<EbookResp> list(EbookReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         criteria.andNameLike("%" + req.getName() + "%");
 
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(req.getPage(), req.getSize());
         List<Ebook> ebooksList = eEbookMapper.selectByExample(ebookExample);
+
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebooksList);
+
+        LOG.info("总行数：{}", pageInfo.getTotal());
+        LOG.info("总页数：{}", pageInfo.getPages());
+
 
         // List<EbookResp> respList = new ArrayList<>();
         // for (Ebook ebook : ebooksList) {
@@ -40,7 +48,11 @@ public class EbookService {
         //     respList.add(ebookResp);
         // }
 
+
         List<EbookResp> list = CopyUtil.copyList(ebooksList, EbookResp.class);
-        return list;
+        PageResp<EbookResp> pageResp = new PageResp();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
+        return pageResp;
     }
 }
