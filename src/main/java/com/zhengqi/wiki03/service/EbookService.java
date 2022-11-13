@@ -5,17 +5,17 @@ import com.github.pagehelper.PageInfo;
 import com.zhengqi.wiki03.domain.Ebook;
 import com.zhengqi.wiki03.domain.EbookExample;
 import com.zhengqi.wiki03.mapper.EbookMapper;
-import com.zhengqi.wiki03.req.EbookReq;
-import com.zhengqi.wiki03.resp.EbookResp;
+import com.zhengqi.wiki03.req.EbookQueryReq;
+import com.zhengqi.wiki03.req.EbookSaveReq;
+import com.zhengqi.wiki03.resp.EbookQueryResp;
 import com.zhengqi.wiki03.resp.PageResp;
 import com.zhengqi.wiki03.util.CopyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +25,7 @@ public class EbookService {
     @Resource
     private EbookMapper eEbookMapper;
 
-    public PageResp<EbookResp> list(EbookReq req) {
+    public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         criteria.andNameLike("%" + req.getName() + "%");
@@ -49,10 +49,23 @@ public class EbookService {
         // }
 
 
-        List<EbookResp> list = CopyUtil.copyList(ebooksList, EbookResp.class);
-        PageResp<EbookResp> pageResp = new PageResp();
+        List<EbookQueryResp> list = CopyUtil.copyList(ebooksList, EbookQueryResp.class);
+        PageResp<EbookQueryResp> pageResp = new PageResp();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;
+    }
+
+    /**
+     * 保存
+     * @param req
+     */
+    public void save(EbookSaveReq req) {
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())) {
+            eEbookMapper.insert(ebook);
+        } else {
+            eEbookMapper.updateByPrimaryKey(ebook);
+        }
     }
 }

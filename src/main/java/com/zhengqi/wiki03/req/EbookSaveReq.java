@@ -1,6 +1,6 @@
-package com.zhengqi.wiki03.resp;
+package com.zhengqi.wiki03.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;
