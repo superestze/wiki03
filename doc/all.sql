@@ -8,7 +8,25 @@ create table `test`
 ) engine = innodb
   default charset = utf8mb4 comment ='测试';
 
-insert into `test` (id, name, password) values (1,'测试','password')
+insert into `test` (id, name, password) values (1,'测试','password');
+
+# 分类
+drop table if exists `category`;
+create table `category`(
+    `id` bigint not null comment 'id',
+    `parent` bigint not null default 0 comment 'parent id',
+    `name` varchar(50) not null comment 'name',
+    `sort` int comment 'sort',
+    primary key (`id`)
+);
+
+insert into `category` (id, parent, name, sort) values (100, 000, '前端开发', 100);
+insert into `category` (id, parent, name, sort) values (101, 100, 'vue', 101);
+insert into `category` (id, parent, name, sort) values (102, 100, 'html', 102);
+insert into `category` (id, parent, name, sort) values (200, 000, 'java', 200);
+insert into `category` (id, parent, name, sort) values (201, 200, 'java基础应用', 201);
+insert into `category` (id, parent, name, sort) values (202, 200, 'java框架应用', 202);
+
 
 drop table if exists `demo`;
 create table `demo`
