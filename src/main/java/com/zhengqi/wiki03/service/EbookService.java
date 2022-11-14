@@ -10,6 +10,7 @@ import com.zhengqi.wiki03.req.EbookSaveReq;
 import com.zhengqi.wiki03.resp.EbookQueryResp;
 import com.zhengqi.wiki03.resp.PageResp;
 import com.zhengqi.wiki03.util.CopyUtil;
+import com.zhengqi.wiki03.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class EbookService {
     private final static Logger LOG = LoggerFactory.getLogger(EbookService.class);
     @Resource
     private EbookMapper eEbookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     public PageResp<EbookQueryResp> list(EbookQueryReq req) {
         EbookExample ebookExample = new EbookExample();
@@ -63,9 +67,19 @@ public class EbookService {
     public void save(EbookSaveReq req) {
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if(ObjectUtils.isEmpty(req.getId())) {
+            ebook.setId(snowFlake.nextId());
             eEbookMapper.insert(ebook);
         } else {
             eEbookMapper.updateByPrimaryKey(ebook);
         }
+    }
+
+
+    /**
+     * 删除
+     * @param id
+     */
+    public void delete(Long id) {
+        eEbookMapper.deleteByPrimaryKey(id);
     }
 }
