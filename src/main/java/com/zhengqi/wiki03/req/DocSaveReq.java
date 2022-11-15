@@ -23,6 +23,19 @@ public class DocSaveReq {
 
     private Integer voteCount;
 
+
+
+    @NotNull(message = "content 不能为空")
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public Long getId() {
         return id;
     }
