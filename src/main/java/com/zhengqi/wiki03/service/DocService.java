@@ -78,12 +78,13 @@ public class DocService {
 
     /**
      * 保存
+     *
      * @param req
      */
     public void save(DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);
         Content content = CopyUtil.copy(req, Content.class);
-        if(ObjectUtils.isEmpty(req.getId())) {
+        if (ObjectUtils.isEmpty(req.getId())) {
             doc.setId(snowFlake.nextId());
             docMapper.insert(doc);
 
@@ -92,7 +93,7 @@ public class DocService {
         } else {
             docMapper.updateByPrimaryKey(doc);
             int count = contentMapper.updateByPrimaryKeyWithBLOBs(content);
-            if(count==0) {
+            if (count == 0) {
                 contentMapper.insert(content);
             }
         }
@@ -101,6 +102,7 @@ public class DocService {
 
     /**
      * 删除
+     *
      * @param id
      */
     public void delete(Long id) {
@@ -109,6 +111,7 @@ public class DocService {
 
     /**
      * 删除
+     *
      * @param ids
      */
     public void delete(List<String> ids) {
@@ -117,6 +120,13 @@ public class DocService {
         criteria.andIdIn(ids);
 
         docMapper.deleteByExample(docExample);
+    }
+
+    public String findContent(Long id) {
+
+        Content content = contentMapper.selectByPrimaryKey(id);
+        return content.getContent();
+
     }
 }
 
