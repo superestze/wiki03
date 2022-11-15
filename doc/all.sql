@@ -28,6 +28,29 @@ insert into `category` (id, parent, name, sort) values (201, 200, 'java基础应
 insert into `category` (id, parent, name, sort) values (202, 200, 'java框架应用', 202);
 
 
+# 文档表
+drop table if exists `doc`;
+create table `doc`(
+    `id` bigint not null comment 'id',
+    `ebook_id` bigint not null  default 0 comment 'ebook id',
+    `parent` bigint not null default 0 comment '父id',
+    `name` varchar(50) not null comment '名称',
+    `sort` int comment '顺序',
+    `view_count` int default 0 comment '阅读数',
+    `vote_count` int default  0 comment '阅读数',
+    primary key (`id`)
+);
+
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (1, 1, 0, '文档1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (2, 1, 1, '文档1.1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (3, 1, 0, '文档2', 2, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (4, 1, 3, '文档2.1', 1, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (5, 1, 3, '文档2.2', 2, 0, 0);
+insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, '文档2.2.1', 1, 0, 0);
+
+
+
+
 drop table if exists `demo`;
 create table `demo`
 (
