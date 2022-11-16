@@ -1,9 +1,11 @@
 package com.zhengqi.wiki03.controller;
 
+import com.zhengqi.wiki03.req.UserLoginReq;
 import com.zhengqi.wiki03.req.UserQueryReq;
 import com.zhengqi.wiki03.req.UserResetPasswordReq;
 import com.zhengqi.wiki03.req.UserSaveReq;
 import com.zhengqi.wiki03.resp.CommonResp;
+import com.zhengqi.wiki03.resp.UserLoginResp;
 import com.zhengqi.wiki03.resp.UserQueryResp;
 import com.zhengqi.wiki03.resp.PageResp;
 import com.zhengqi.wiki03.service.UserService;
@@ -54,5 +56,15 @@ public class UserController {
         CommonResp resp = new CommonResp();
         userService.delete(id);
         return resp;
+    }
+
+    @PostMapping("/login")
+    public CommonResp login(@RequestBody UserLoginReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp resp = new CommonResp();
+        UserLoginResp userLoginResp =  userService.login(req);
+        resp.setContent(userLoginResp);
+        return resp;
+
     }
 }

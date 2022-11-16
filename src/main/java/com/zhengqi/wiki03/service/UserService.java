@@ -7,9 +7,11 @@ import com.zhengqi.wiki03.domain.UserExample;
 import com.zhengqi.wiki03.exception.BusinessException;
 import com.zhengqi.wiki03.exception.BusinessExceptionCode;
 import com.zhengqi.wiki03.mapper.UserMapper;
+import com.zhengqi.wiki03.req.UserLoginReq;
 import com.zhengqi.wiki03.req.UserQueryReq;
 import com.zhengqi.wiki03.req.UserResetPasswordReq;
 import com.zhengqi.wiki03.req.UserSaveReq;
+import com.zhengqi.wiki03.resp.UserLoginResp;
 import com.zhengqi.wiki03.resp.UserQueryResp;
 import com.zhengqi.wiki03.resp.PageResp;
 import com.zhengqi.wiki03.util.CopyUtil;
@@ -111,5 +113,20 @@ public class UserService {
     public void resetPassword(UserResetPasswordReq req) {
         User user = CopyUtil.copy(req, User.class);
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    // 登录
+    public UserLoginResp login(UserLoginReq req) {
+        User userDb = selectByLoginName(req.getLoginName());
+        if (ObjectUtils.isEmpty(userDb)) {
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        } else {
+            if (userDb.getPassword().equals(req.getPassword())) {
+                UserLoginResp userLoginResp = CopyUtil.copy(userDb, UserLoginResp.class);
+                return userLoginResp;
+            } else {
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
+        }
     }
 }
