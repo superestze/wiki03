@@ -107,3 +107,14 @@ insert into `ebook` (id, name, description)
 values (3, 'sprintboot', '零基础java入门');
 insert into `ebook` (id, name, description)
 values (4, 'sprintboot', '零基础java入门');
+
+# 用户表
+drop table if exists `user`;
+create table `user`(
+    `id` bigint not null comment 'id',
+    `login_name` varchar(50) not null comment '登录名',
+    `name` varchar(50) comment 'name',
+    `password` char(32) comment 'password',
+    primary key (`id`),
+    unique key `login_name_unique` (`login_name`)
+) comment 'user'
