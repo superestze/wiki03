@@ -1,10 +1,21 @@
 package com.zhengqi.wiki03.resp;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+
 public class UserLoginResp {
     private Long id;
 
     private String loginName;
     private String name;
+    private Long token;
+
+    public Long getToken() {
+        return token;
+    }
+
+    public void setToken(Long token) {
+        this.token = token;
+    }
 
     public Long getId() {
         return id;
@@ -33,14 +44,12 @@ public class UserLoginResp {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", loginName=").append(loginName);
-        sb.append(", name=").append(name);
-        sb.append("]");
+        final StringBuffer sb = new StringBuffer("UserLoginResp{");
+        sb.append("id=").append(id);
+        sb.append(", loginName='").append(loginName).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", token=").append(token);
+        sb.append('}');
         return sb.toString();
     }
 }
