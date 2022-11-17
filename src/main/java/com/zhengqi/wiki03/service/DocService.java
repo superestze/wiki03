@@ -7,6 +7,7 @@ import com.zhengqi.wiki03.domain.Doc;
 import com.zhengqi.wiki03.domain.DocExample;
 import com.zhengqi.wiki03.mapper.ContentMapper;
 import com.zhengqi.wiki03.mapper.DocMapper;
+import com.zhengqi.wiki03.mapper.DocMapperCust;
 import com.zhengqi.wiki03.req.DocQueryReq;
 import com.zhengqi.wiki03.req.DocSaveReq;
 import com.zhengqi.wiki03.resp.DocQueryResp;
@@ -30,6 +31,8 @@ public class DocService {
 
     @Resource
     private ContentMapper contentMapper;
+    @Resource
+    private DocMapperCust docMapperCust;
 
     @Resource
     private SnowFlake snowFlake;
@@ -86,6 +89,8 @@ public class DocService {
         Content content = CopyUtil.copy(req, Content.class);
         if (ObjectUtils.isEmpty(req.getId())) {
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
             docMapper.insert(doc);
 
             content.setId(doc.getId());
@@ -123,10 +128,16 @@ public class DocService {
     }
 
     public String findContent(Long id) {
-
         Content content = contentMapper.selectByPrimaryKey(id);
-        return content.getContent();
-
+        // 文档电子书+1
+        docMapperCust.increaseViewCount(id);
+        if (ObjectUtils.isEmpty(content)) {
+            return null;
+        } else {
+            return content.getContent();
+        }
     }
+
+
 }
 
