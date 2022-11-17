@@ -84,6 +84,15 @@ public class UserController {
         redisTemplate.opsForValue().set(token, JSONObject.toJSONString(userLoginResp), 3600*24, TimeUnit.SECONDS);
         resp.setContent(userLoginResp);
         return resp;
-
     }
+
+    @GetMapping("/logout/{token}")
+    public CommonResp logout(@PathVariable Long token) {
+        CommonResp resp = new CommonResp();
+        redisTemplate.delete(token);
+        LOG.info("从redis 中删除token");
+        return resp;
+    }
+
+
 }
