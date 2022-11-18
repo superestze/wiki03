@@ -19,12 +19,14 @@ import com.zhengqi.wiki03.util.RedisUtil;
 import com.zhengqi.wiki03.util.RequestContext;
 import com.zhengqi.wiki03.util.SnowFlake;
 import com.zhengqi.wiki03.websocket.WebSocketServer;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
@@ -40,8 +42,8 @@ public class DocService {
     @Resource
     private WsService wsService;
 
-
-
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
 
     @Resource
     private ContentMapper contentMapper;
@@ -101,6 +103,7 @@ public class DocService {
      *
      * @param req
      */
+    @Transactional
     public void save(DocSaveReq req) {
         Doc doc = CopyUtil.copy(req, Doc.class);
         Content content = CopyUtil.copy(req, Content.class);
@@ -165,7 +168,8 @@ public class DocService {
         Doc docDb = docMapper.selectByPrimaryKey(id);
         String logId = MDC.get("LOG_ID");
 
-        wsService.sendInfo("[" + docDb.getName() + "]被点赞", logId);
+        // wsService.sendInfo("[" + docDb.getName() + "]被点赞", logId);
+        rocketMQTemplate.convertAndSend("VOTE_TOPIC", "[" + docDb.getName() + "]被点赞");
     }
 
     public void updateEbookInfo(){
