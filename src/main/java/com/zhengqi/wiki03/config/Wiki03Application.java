@@ -7,11 +7,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
 // import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @ComponentScan("com.zhengqi")
 @SpringBootApplication
 @MapperScan("com.zhengqi.wiki03.mapper")
+@EnableScheduling
 public class Wiki03Application {
 
     private final static Logger LOG = LoggerFactory.getLogger(Wiki03Application.class);
