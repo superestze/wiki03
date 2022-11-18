@@ -22,6 +22,7 @@ import com.zhengqi.wiki03.websocket.WebSocketServer;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -162,8 +163,9 @@ public class DocService {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
         Doc docDb = docMapper.selectByPrimaryKey(id);
+        String logId = MDC.get("LOG_ID");
 
-        wsService.sendInfo("[" + docDb.getName() + "]被点赞");
+        wsService.sendInfo("[" + docDb.getName() + "]被点赞", logId);
     }
 
     public void updateEbookInfo(){
