@@ -18,12 +18,16 @@ import com.zhengqi.wiki03.util.CopyUtil;
 import com.zhengqi.wiki03.util.RedisUtil;
 import com.zhengqi.wiki03.util.RequestContext;
 import com.zhengqi.wiki03.util.SnowFlake;
+import com.zhengqi.wiki03.websocket.WebSocketServer;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import javax.websocket.server.ServerEndpoint;
 import java.util.List;
 
 @Service
@@ -32,6 +36,11 @@ public class DocService {
     private final static Logger LOG = LoggerFactory.getLogger(DocService.class);
     @Resource
     private DocMapper docMapper;
+    @Resource
+    private WsService wsService;
+
+
+
 
     @Resource
     private ContentMapper contentMapper;
@@ -152,6 +161,9 @@ public class DocService {
         } else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
+        Doc docDb = docMapper.selectByPrimaryKey(id);
+
+        wsService.sendInfo("[" + docDb.getName() + "]被点赞");
     }
 
     public void updateEbookInfo(){
