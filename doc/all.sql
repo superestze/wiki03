@@ -110,11 +110,28 @@ values (4, 'sprintboot', '零基础java入门');
 
 # 用户表
 drop table if exists `user`;
-create table `user`(
-    `id` bigint not null comment 'id',
+create table `user`
+(
+    `id`         bigint      not null comment 'id',
     `login_name` varchar(50) not null comment '登录名',
-    `name` varchar(50) comment 'name',
-    `password` char(32) comment 'password',
+    `name`       varchar(50) comment 'name',
+    `password`   char(32) comment 'password',
     primary key (`id`),
     unique key `login_name_unique` (`login_name`)
-) comment 'user'
+) comment 'usera';
+
+
+#  电子书快照表
+drop table if exists `sbook_snapshot`;
+create table `ebook_snapshot`
+(
+    `id`            bigint auto_increment not null comment 'id',
+    `ebook_id`      bigint                not null default 0 comment 'ebook id',
+    `date`          date                  not null comment 'date',
+    `view_count`    int                   not null default 0 comment 'view count',
+    `vote_count`    int                   not null default 0 comment 'vote count',
+    `view_increase` int                   not null default 0 comment '阅读增长数',
+    `vote_increase` int                   not null default 0 comment '点赞增长',
+    primary key (`id`),
+    unique key `ebook_id_date_unique`(`ebook_id`, `date`)
+)
