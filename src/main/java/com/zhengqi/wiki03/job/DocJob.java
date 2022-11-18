@@ -28,6 +28,9 @@ public class DocJob {
      */
     @Scheduled(cron="1/30 * * * * ?")
     public void cron() throws InterruptedException {
+        LOG.info("更新电子书下的文档数据");
+        long start = System.currentTimeMillis();
         docService.updateEbookInfo();
+        LOG.info("更新电子书下的文档数据结束， 耗时：{}毫秒", System.currentTimeMillis() - start);
     }
 }
