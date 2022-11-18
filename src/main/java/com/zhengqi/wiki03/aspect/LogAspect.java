@@ -3,6 +3,7 @@ package com.zhengqi.wiki03.aspect;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
 import com.zhengqi.wiki03.util.RequestContext;
+import com.zhengqi.wiki03.util.SnowFlake;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -12,11 +13,13 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -29,12 +32,18 @@ import javax.servlet.http.HttpServletRequest;
 public class LogAspect {
     private final static Logger LOG = LoggerFactory.getLogger(LogAspect.class);
 
+    @Resource
+    private SnowFlake snowFlake;
+
     @Pointcut("execution(public * com.zhengqi.*.controller..*Controller.*(..))")
     public void controllerPointcut() {
     }
 
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
+        // 曾加日志流水号
+        MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
+
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         Signature signature = joinPoint.getSignature();
